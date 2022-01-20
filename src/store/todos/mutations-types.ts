@@ -1,0 +1,4 @@
+export const SET_TODOS = "SET_TODOS";
+export const MOVE_TO_COMPLETED = "MOVE_TO_COMPLETED";
+export const MOVE_TO_CURRENT = "MOVE_TO_CURRENT";
+export const SET_HISTORY_EVENT = "SET_HISTORY_EVENT";
