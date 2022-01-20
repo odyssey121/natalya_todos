@@ -149,11 +149,12 @@ export default Vue.extend<IData, IMethods, IComputed>({
       return m != null ? m.length : 0;
     },
     makeEvent(item: TodoItem, action: HistoryAction): HistoryEvent {
+      const date = new Date();
       return {
         action,
         name: item.title,
-        id: item.id,
-        date: new Date(),
+        id: date.getTime(),
+        date
       };
     },
   },
