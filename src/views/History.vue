@@ -1,23 +1,6 @@
 <template>
   <div class="history">
-    <table class="table_history">
-      <thead>
-        <tr>
-          <td>id</td>
-          <td>name</td>
-          <td>action</td>
-          <td>date</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="table_row" v-for="item in historyList" :key="item.id">
-          <th>{{ item.id }}</th>
-          <th>{{ item.name }}</th>
-          <th>{{ item.action }}</th>
-          <th>{{ $helpers.getDateFull(item.date) }}</th>
-        </tr>
-      </tbody>
-    </table>
+    <history-table :table-items="historyList" />
   </div>
 </template>
 
@@ -29,6 +12,7 @@ import {
   HistoryAction,
   HistoryEvent,
 } from "@/store/todos/interfaces";
+import HistoryTable from "@/components/HistoryTable.vue";
 
 interface IData {
   historyList: Array<HistoryEvent>;
@@ -44,6 +28,7 @@ interface IMethods {
 
 export default Vue.extend<IData, IMethods, IComputed>({
   name: "History",
+  components: { HistoryTable },
   data() {
     return {
       historyList: [],
@@ -56,7 +41,6 @@ export default Vue.extend<IData, IMethods, IComputed>({
   watch: {
     "$route.query.sub": {
       handler: function (sub) {
-        console.log("sub", sub);
         switch (sub?.toLowerCase()) {
           case "completed":
             this.historyList = this.getHistory.filter(
@@ -83,8 +67,4 @@ export default Vue.extend<IData, IMethods, IComputed>({
 });
 </script>
 
-<style scoped lang="scss">
-.table_history {
-  width: 100%;
-}
-</style>
+<style scoped lang="scss"></style>

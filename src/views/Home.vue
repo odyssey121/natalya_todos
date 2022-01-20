@@ -1,49 +1,24 @@
 <template>
   <div class="home">
     <div class="tables_area">
-      <table key="table-1">
-        <thead>
-          <tr>
-            <td>
-              <div class="search_block">
-                <span>Current</span
-                ><input v-model="searchStr" type="text" placeholder="search" />
-              </div>
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            class="table_row"
-            v-for="todo in currentTodos"
-            :key="todo.id + 666"
-          >
-            <th>
-              <button v-on:click="moveToCompleted(todo)">+</button>
-              {{ todo.title }}
-            </th>
-          </tr>
-        </tbody>
-      </table>
-      <table key="table-2">
-        <thead>
-          <tr>
-            <td>Completed</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            class="table_row"
-            v-for="todo in completedTodos"
-            :key="todo.id + 999"
-          >
-            <th>
-              <button v-on:click="moveToCurrent(todo)">-</button>
-              {{ todo.title }}
-            </th>
-          </tr>
-        </tbody>
-      </table>
+      <todo-table
+        v-for="(d, i) in tablesData"
+        :table-title="d.tableTitle"
+        :table-items="d.tableItems"
+        :key="i"
+      >
+        <template #search-action v-if="d.tableTitle === 'Current'">
+          <input
+            v-model="searchStr"
+            type="text"
+            placeholder="search"
+            id="search-input"
+          />
+        </template>
+        <template #button-action="{ item }">
+          <button @click="d.actionCallback(item)">{{ d.btnTxt }}</button>
+        </template>
+      </todo-table>
     </div>
   </div>
 </template>
@@ -62,20 +37,25 @@ import {
   MOVE_TO_CURRENT,
   SET_HISTORY_EVENT,
 } from "@/store/todos/mutations-types";
-
-// interface TProps {
-//
-// }
+import TodoTable from "@/components/TodoTable.vue";
 
 interface IData {
   searchStr: string;
   subscribeOnHistoryEvent: () => void;
 }
 
+interface TablesData {
+  tableTitle: string;
+  tableItems: Array<TodoItem>;
+  actionCallback: (d: TodoItem) => void;
+  btnTxt: string;
+}
+
 interface IComputed {
   todos: Array<TodoItem>;
   completedTodos: Array<TodoItem>;
   currentTodos: Array<TodoItem>;
+  tablesData: TablesData[];
 }
 
 interface IMethods {
@@ -115,6 +95,7 @@ export default Vue.extend<IData, IMethods, IComputed>({
   data() {
     return {
       searchStr: "",
+      slotName: "button-action",
       subscribeOnHistoryEvent: () => undefined,
     };
   },
@@ -123,6 +104,22 @@ export default Vue.extend<IData, IMethods, IComputed>({
       todos: "getTodos",
       completedTodos: "getCompletedTodos",
     }),
+    tablesData() {
+      return [
+        {
+          tableTitle: "Current",
+          tableItems: this.currentTodos,
+          actionCallback: this.moveToCompleted,
+          btnTxt: "+",
+        },
+        {
+          tableTitle: "Completed",
+          tableItems: this.completedTodos,
+          actionCallback: this.moveToCurrent,
+          btnTxt: "-",
+        },
+      ];
+    },
     currentTodos() {
       if (this.searchStr) {
         return this.todos
@@ -138,7 +135,7 @@ export default Vue.extend<IData, IMethods, IComputed>({
       }
     },
   },
-  components: {},
+  components: { TodoTable },
 
   methods: {
     ...mapActions("todos", ["fetchTodos"]),
@@ -164,60 +161,18 @@ export default Vue.extend<IData, IMethods, IComputed>({
 </script>
 
 <style scoped lang="scss">
-.search_block {
-  display: flex;
-  align-items: center;
-}
-
-.search_block > input {
-  width: 100%;
-  margin-left: 12px;
-}
-
 .tables_area {
-  column-gap: 34px;
   width: 90%;
   margin-left: auto;
   margin-right: auto;
 }
 
-thead > tr {
-  text-align: left;
+.search_block {
+  display: flex;
+  align-items: center;
 }
 
-table {
-  vertical-align: top;
-  width: 50%;
-  display: inline-block;
-}
-
-table > tr > th {
-  text-align: left;
-}
-
-.table_row {
-  vertical-align: top;
-  text-align: left;
-}
-
-.table_row > th {
-  font-weight: normal;
-  font-size: 12px;
-  padding: 8px 2px;
-  border-bottom: 1px solid dimgrey;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
+#search-input {
+  margin-left: 12px;
 }
 </style>
