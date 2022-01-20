@@ -4,7 +4,7 @@ import axios, {
   AxiosResponse,
   AxiosError,
 } from "axios";
-import { httpErrorHandler } from "./error";
+import { httpErrorHandler } from "@/helpers/error";
 
 const http: AxiosInstance = axios.create({
   baseURL: "https://jsonplaceholder.typicode.com/",

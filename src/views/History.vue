@@ -2,20 +2,20 @@
   <div class="history">
     <table class="table_history">
       <thead>
-      <tr>
-        <td>id</td>
-        <td>name</td>
-        <td>action</td>
-        <td>date</td>
-      </tr>
+        <tr>
+          <td>id</td>
+          <td>name</td>
+          <td>action</td>
+          <td>date</td>
+        </tr>
       </thead>
       <tbody>
-      <tr class="table_row" v-for="item in historyList" :key="item.id">
-        <th>{{ item.id }}</th>
-        <th>{{ item.name }}</th>
-        <th>{{ item.action }}</th>
-        <th>{{ dateFormat(item.date) }}</th>
-      </tr>
+        <tr class="table_row" v-for="item in historyList" :key="item.id">
+          <th>{{ item.id }}</th>
+          <th>{{ item.name }}</th>
+          <th>{{ item.action }}</th>
+          <th>{{ $helpers.getDateFull(item.date) }}</th>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -24,11 +24,10 @@
 <script lang="ts">
 import Vue from "vue";
 import { mapGetters } from "vuex";
-import moment from "moment";
 import {
   HISTORY_ACTIONS,
   HistoryAction,
-  HistoryEvent
+  HistoryEvent,
 } from "@/store/todos/interfaces";
 
 interface IData {
@@ -40,27 +39,23 @@ interface IComputed {
 }
 
 interface IMethods {
-  dateFormat: (d: Date) => string;
+  dateFormat?: (d: Date) => string;
 }
 
 export default Vue.extend<IData, IMethods, IComputed>({
   name: "History",
   data() {
     return {
-      historyList: []
+      historyList: [],
     };
   },
   computed: {
-    ...mapGetters("todos", ["getHistory"])
+    ...mapGetters("todos", ["getHistory"]),
   },
-  methods: {
-    dateFormat(date: Date) {
-      return moment(date).toISOString();
-    }
-  },
+  methods: {},
   watch: {
     "$route.query.sub": {
-      handler: function(sub) {
+      handler: function (sub) {
         console.log("sub", sub);
         switch (sub?.toLowerCase()) {
           case "completed":
@@ -82,9 +77,9 @@ export default Vue.extend<IData, IMethods, IComputed>({
         }
       },
       deep: true,
-      immediate: true
-    }
-  }
+      immediate: true,
+    },
+  },
 });
 </script>
 
