@@ -10,8 +10,8 @@
     </thead>
     <tbody>
       <tr class="table_row" v-for="item in tableItems" :key="item.id">
-        <th>{{ item.id }}</th>
-        <th>{{ item.name }}</th>
+        <th>{{ item.todoItem.id }}</th>
+        <th>{{ item.todoItem.title }}</th>
         <th>{{ item.action }}</th>
         <th>{{ $helpers.getDateFull(item.date) }}</th>
       </tr>

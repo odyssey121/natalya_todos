@@ -20,7 +20,7 @@ export type HistoryAction = HISTORY_ACTIONS[keyof HISTORY_ACTIONS];
 
 export interface HistoryEvent {
   action: HistoryAction;
-  name: string;
+  todoItem: TodoItem;
   id: number;
   date: Date;
 }

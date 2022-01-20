@@ -15,7 +15,7 @@ import {
 import HistoryTable from "@/components/HistoryTable.vue";
 
 interface IData {
-  historyList: Array<HistoryEvent>;
+  historyList: HistoryEvent[];
 }
 
 interface IComputed {
