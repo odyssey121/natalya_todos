@@ -30,12 +30,12 @@ import {
   HISTORY_ACTIONS,
   HistoryAction,
   HistoryEvent,
-  TodoItem
+  TodoItem,
 } from "@/store/todos/interfaces";
 import {
   MOVE_TO_COMPLETED,
   MOVE_TO_CURRENT,
-  SET_HISTORY_EVENT
+  SET_HISTORY_EVENT,
 } from "@/store/todos/mutations-types";
 import TodoTable from "@/components/TodoTable.vue";
 
@@ -96,13 +96,13 @@ export default Vue.extend<IData, IMethods, IComputed>({
     return {
       searchStr: "",
       slotName: "button-action",
-      subscribeOnHistoryEvent: () => undefined
+      subscribeOnHistoryEvent: () => undefined,
     };
   },
   computed: {
     ...mapGetters("todos", {
       todos: "getTodos",
-      completedTodos: "getCompletedTodos"
+      completedTodos: "getCompletedTodos",
     }),
     tablesData() {
       return [
@@ -110,14 +110,14 @@ export default Vue.extend<IData, IMethods, IComputed>({
           tableTitle: "Current",
           tableItems: this.currentTodos,
           actionCallback: this.moveToCompleted,
-          btnTxt: "+"
+          btnTxt: "+",
         },
         {
           tableTitle: "Completed",
           tableItems: this.completedTodos,
           actionCallback: this.moveToCurrent,
-          btnTxt: "-"
-        }
+          btnTxt: "-",
+        },
       ];
     },
     currentTodos() {
@@ -133,7 +133,7 @@ export default Vue.extend<IData, IMethods, IComputed>({
       } else {
         return this.todos;
       }
-    }
+    },
   },
   components: { TodoTable },
 
@@ -142,7 +142,7 @@ export default Vue.extend<IData, IMethods, IComputed>({
     ...mapMutations("todos", {
       moveToCompleted: MOVE_TO_COMPLETED,
       moveToCurrent: MOVE_TO_CURRENT,
-      setHistoryEvent: SET_HISTORY_EVENT
+      setHistoryEvent: SET_HISTORY_EVENT,
     }),
     matchCount(str: string) {
       const m = str.match(new RegExp(this.searchStr, "gi"));
@@ -155,10 +155,10 @@ export default Vue.extend<IData, IMethods, IComputed>({
         id,
         action,
         todoItem,
-        date
+        date,
       };
-    }
-  }
+    },
+  },
 });
 </script>
 
